@@ -39,3 +39,13 @@ print(g.t())
 
 # 张量的形状
 print(g.shape)
+
+# 创建一个需要梯度的张量
+tensor_requires_grad = torch.tensor([1.0], requires_grad=True)
+
+# 进行一些操作
+tensor_result = tensor_requires_grad * 2
+
+# 计算梯队
+tensor_result.backward()
+print(tensor_requires_grad.grad) # 输出梯度
