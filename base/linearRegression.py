@@ -22,9 +22,9 @@ model = LinearRegressionModel()
 criterion = nn.MSELoss()
 
 # 优化器
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)  # 学习率设置为0.01
-# 也可以使用Adm优化器
-# optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+# optimizer = torch.optim.SGD(model.parameters(), lr=0.01)  # 学习率设置为0.01
+# # 使用 Adam 优化器（通常收敛更快）
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 
 # 随机种子，确保每次运行结果一致
 torch.manual_seed(42)
@@ -34,7 +34,15 @@ X = torch.randn(100, 2)  # 100个文件，每个样本2个特征
 true_w = torch.tensor([2.0, 3.0])  # 假设真实权重
 true_b = 4.0  # 偏置项
 Y = X @ true_w + true_b + torch.randn(100) * 0.1  # 加入一些噪声
+# 检查输出形状
+predictions = model(X)
+print(f'模型输出形状: {predictions.shape}')  # 应该是 [100, 1]
+# 压缩为 1D
+predictions = predictions.squeeze()
+print(f'压缩后形状: {predictions.shape}')  # 应该是 [100]
 
+# 计算损失
+loss = criterion(predictions, Y)
 # 打印部分数据
 print("X", X[:5])
 print("Y", Y[:5])
@@ -66,7 +74,13 @@ with torch.no_grad():  # 评估时不需要计算梯度
     predictions = model(X)
 
 # 可视化预测与实际值
-plt.scatter(X[:, 0], Y, color='blue', label='True values')
-plt.scatter(X[:, 0], predictions, color='red', label='Predicted values')
-plt.legend()
-plt.show()
+# plt.scatter(X[:, 0], Y, color='blue', label='True values')
+# plt.scatter(X[:, 0], predictions, color='red', label='Predicted values')
+# plt.legend()
+# plt.show()
+
+# 5 评估模型
+print(f"\n训练后的权重:{model.linear.weight.data.numpy()}")
+print(f"训练后的偏置:{model.linear.bias.data.numpy()}")
+print(f"真实权重:{true_w.numpy()}")
+print(f"真实偏置:{true_b}")
