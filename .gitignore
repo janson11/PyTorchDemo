@@ -2,3 +2,4 @@
 /apply/logs/
 /train/data/
 /train/checkpoints/
+/train/best_image_model.pth
